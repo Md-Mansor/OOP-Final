@@ -1,25 +1,26 @@
-from abc import ABC
 from restaurant import Restaurant
+from user import Admin
 
+# Create an instance of Restaurant
+restaurant = Restaurant("Food Paradise")
 
-class User(ABC):
-    def __int__(self, name, mobile, email, address):
-        self.name = name
-        self.mobile = mobile
-        self.email = email
-        self.address = address
+# Pass the restaurant instance to Admin
+admin = Admin("Me", "admin@example.com", "123 Admin St.", restaurant)
 
+# Add customers
+admin.add_customer("John Doe", "john.doe@example.com", "123 Elm Street")
+admin.add_customer("Jane Smith", "jane.smith@example.com", "456 Oak Avenue")
 
-class Customer(User):
-    def __init__(self, name, mobile, email, address):
-        super().__init__(name, mobile, email, address)
+# Add items to the restaurant
+admin.add_items("Burger", 50, 20)
+admin.add_items("Pizza", 30, 40)
 
-    def view_menu(self, restaurant):
-        for item in restaurant.item_list:
-            print(f"Name: {item.item_name}\t Quantity: {item.item_quantity}\t Price: {item.item_price} ")
+# Display the added items
+print("Menu Items:")
+for item in restaurant.item_list:
+    print(f"Item: {item.name}, Quantity: {item.quantity}, Price: ${item.price:.2f}")
 
-
-class Admin(User):
-    def __init__(self, name, mobile, email, address, nid):
-        super().__init__(name, mobile, email, address)
-        self.nid = nid
+# View customers
+admin.view_customer()
+admin.remove_customer("john doe")
+admin.view_customer()
