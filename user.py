@@ -14,6 +14,7 @@ class Customer(User):
         super().__init__(name, email, address)
         self.order_cart = []
         self.past_order = []
+        self.initial_balance = 0
 
     def view_menu(self, restaurant):
         for item in restaurant.item_list:
@@ -21,28 +22,36 @@ class Customer(User):
 
     def cart(self, restaurant, item_name, quantity):
         for item in restaurant.item_list:
-            if item.name.lower() == item_name.lower() and item.quantity >= quantity:
-                self.order_cart.append(f"(Name:{item.name},Price:{item.price}, Quantity:{quantity})")
-                item.quantity -= quantity
-                return
-            else:
-                print("Not Enough item available")
-                return
-        print("Item not found")
+            if item.name.lower() == item_name.lower():
+                if item.quantity >= quantity:
+                    self.order_cart.append({
+                        "Name": item.name,
+                        "Price": item.price,
+                        "Quantity": quantity
+                    })
+                    item.quantity -= quantity
+                    print(f"{quantity} {item.name}(s) added to the cart.")
+                    return
+                else:
+                    print("Not enough items available.")
+                    return
+        print("Item not found.")
 
     def place_order(self):
+        if not self.order_cart:
+            print("Your cart is empty.")
+            return
         print("**Order Summary**")
         total_price = 0
-        for name, price, quantity in self.order_cart:
+        for order in self.order_cart:
+            name = order["Name"]
+            price = order["Price"]
+            quantity = order["Quantity"]
             print(f"Item: {name}, Quantity: {quantity}, Unit Price: {price}, Total: {price * quantity}")
             total_price += price * quantity
-            self.past_order.append({
-                "Name": name,
-                "Quantity": quantity,
-                "Total": price * quantity,
-                "Sub": total_price
-            })
+            self.past_order.append(order)
         self.order_cart.clear()
+        print(f"Total Price: {total_price}")
         print("Order placed successfully!")
 
     def view_past_order(self):
@@ -52,6 +61,9 @@ class Customer(User):
                 f"Name: {ordered_item['Name']}\tQuantity: {ordered_item['Quantity']}\t"
                 f"Total: {ordered_item['Total']}\tSub Total: {ordered_item['Sub']}"
             )
+
+    def add_funds(self, money):
+        self.initial_balance += money
 
 
 class Admin(User):
@@ -66,8 +78,8 @@ class Admin(User):
     def view_items(self):
         self.restaurant.view_item()
 
-    def remove_items(self):
-        self.restaurant.remove_item()
+    def remove_items(self, item_name):
+        self.restaurant.remove_item(item_name)
 
     def update_item_price(self, item_name, new_price):
         self.restaurant.update_price(item_name, new_price)

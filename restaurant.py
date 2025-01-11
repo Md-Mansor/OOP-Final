@@ -9,6 +9,7 @@ class Restaurant:
     def __init__(self, name):
         self.name = name
         self.item_list = []
+        self.customer_list = []
 
     def add_item(self, item_name, item_quantity, item_price):
         new_item = Item(item_name, item_quantity, item_price)
@@ -35,3 +36,11 @@ class Restaurant:
                 print(f"The price of {item_name} has been updated to {new_price}")
                 return
         print(f"Item {item_name} not found, price update failed.")
+
+    def add_customer(self, customer):
+        self.customer_list.append(customer)
+
+    def view_customers(self):
+        print("**Customer List**")
+        for customer in self.customer_list:
+            print(f"Name: {customer.name}\tEmail: {customer.email}\tAddress: {customer.address}")
