@@ -26,6 +26,15 @@ class Admin(User):
     def add_items(self, item_name, item_quantity, item_price):
         self.restaurant.add_item(item_name, item_quantity, item_price)
 
+    def view_items(self):
+        self.restaurant.view_item()
+
+    def remove_items(self):
+        self.restaurant.remove_item()
+
+    def update_item_price(self, item_name, new_price):
+        self.restaurant.update_price(item_name, new_price)
+
     def add_customer(self, name, email, address):
         new_customer = Customer(name, email, address)
         self.customers.append(new_customer)
@@ -37,9 +46,9 @@ class Admin(User):
 
     def remove_customer(self, fine_name):
         print("Removing Customer by their Name...")
-        for remove_item in self.customers:
-            if remove_item.name.lower() == fine_name.lower():
-                self.customers.remove(remove_item)
+        for remove_one in self.customers:
+            if remove_one.name.lower() == fine_name.lower():
+                self.customers.remove(remove_one)
                 print(f"Customer '{fine_name}' has been removed.")
                 return
         print("Customer name not found.")
