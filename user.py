@@ -37,40 +37,63 @@ class Customer(User):
         print("Item not found.")
 
     def view_cart(self):
-        for product in self.order_cart:
-            print(
-                f"item name: {product["Name"]}\t product quantity: {product["Quantity"]} unit price: {product["Price"]}\t total price: {product["Price"] * ["Quantity"]}")
-
-    def place_order(self):
         if not self.order_cart:
             print("Your cart is empty.")
             return
+        for product in self.order_cart:
+            print(
+                f"item name: {product['Name']}\t product quantity: {product['Quantity']} unit price: {product['Price']}\t total price: {product['Price'] * product['Quantity']}")
+
+    def place_order(self):
+        if len(self.order_cart) == 0:
+            print("Your cart is empty.")
+            return
+
+        subtotal = sum(item["Price"] * item["Quantity"] for item in self.order_cart)
+
+        if self.initial_balance < subtotal:
+            print("Insufficient balance. Please add funds.")
+            return
+
         print("**Order Summary**")
-        total_price = 0
         for order in self.order_cart:
             name = order["Name"]
             price = order["Price"]
             quantity = order["Quantity"]
-            print(f"Item: {name}, Quantity: {quantity}, Unit Price: {price}, Total: {price * quantity}")
-            total_price += price * quantity
+            total = price * quantity
+            print(f"Item: {name}, Quantity: {quantity}, Unit Price: {price}, Total: {total}")
+            order["Total"] = total
             self.past_order.append(order)
+
+        print(f"Subtotal: {subtotal}")
+
+        self.initial_balance -= subtotal
+        print(f"Remaining Balance: {self.initial_balance}")
+
         self.order_cart.clear()
-        print(f"Total Price: {total_price}")
         print("Order placed successfully!")
 
     def view_past_order(self):
         print("**Past Orders**")
+        if not self.past_order:
+            print("No past orders available.")
+            return
+
+        grand_total = 0
         for ordered_item in self.past_order:
+            total = ordered_item["Price"] * ordered_item["Quantity"]
+            grand_total += total
             print(
                 f"Name: {ordered_item['Name']}\tQuantity: {ordered_item['Quantity']}\t"
-                f"Total: {ordered_item['Total']}\tSub Total: {ordered_item['Sub']}"
+                f"Unit Price: {ordered_item['Price']}\tTotal: {total}"
             )
+        print(f"Subtotal of All Orders: {grand_total}")
 
     def add_funds(self, money):
         self.initial_balance += money
 
     def view_balance(self):
-        print(self.initial_balance)
+        print(f"Your Total Balance: {self.initial_balance}")
 
 
 class Admin(User):

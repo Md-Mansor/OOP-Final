@@ -1,10 +1,9 @@
 from restaurant import Restaurant
 
 restaurant = Restaurant("Food Paradise")
-print(restaurant)
 
 while True:
-    print("1.Admin")
+    print("1. Admin")
     print("2. Customer")
     print("3. Exit")
     choice = int(input("Enter Your User Type: "))

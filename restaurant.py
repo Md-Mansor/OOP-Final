@@ -1,6 +1,5 @@
 from user import Admin, User, Customer
 
-
 class Item:
     def __init__(self, name, quantity, price):
         self.name = name
@@ -72,10 +71,10 @@ class Restaurant:
             elif choice == 2:
                 new_admin.view_items()
             elif choice == 3:
-                remove_name = input("Enter Name For Remove: ")
+                remove_name = input("Enter Name Of Item For Remove: ")
                 new_admin.remove_items(remove_name)
             elif choice == 4:
-                update_product = input("Enter Item Name For Update")
+                update_product = input("Enter Item Name For Price Update: ")
                 new_price = int(input("Enter New Price: "))
                 new_admin.update_item_price(update_product, new_price)
             elif choice == 5:
@@ -95,11 +94,13 @@ class Restaurant:
 
     def customer_menu(self, restaurant):
         your_name = input("Enter Your Name: ")
+        flag = 0
         old_customer = None
         for customer in self.customer_list:
             if your_name.lower() == customer.name.lower():
                 your_email = input("Enter Your Email Address: ")
                 if your_email.lower() == customer.email.lower():
+                    flag = 1
                     old_customer = customer
                 else:
                     print("Email Does Not Match")
@@ -107,7 +108,8 @@ class Restaurant:
                 print("Name Does Not Match")
 
         if old_customer is None:
-            return "Invalid Access"
+            return "Invalid Access: Either name or email is incorrect."
+
         else:
             while True:
                 print("1. View Menu")
