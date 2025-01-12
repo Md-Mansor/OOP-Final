@@ -1,5 +1,4 @@
 from abc import ABC
-from restaurant import Restaurant
 
 
 class User(ABC):
@@ -37,6 +36,11 @@ class Customer(User):
                     return
         print("Item not found.")
 
+    def view_cart(self):
+        for product in self.order_cart:
+            print(
+                f"item name: {product["Name"]}\t product quantity: {product["Quantity"]} unit price: {product["Price"]}\t total price: {product["Price"] * ["Quantity"]}")
+
     def place_order(self):
         if not self.order_cart:
             print("Your cart is empty.")
@@ -65,12 +69,14 @@ class Customer(User):
     def add_funds(self, money):
         self.initial_balance += money
 
+    def view_balance(self):
+        print(self.initial_balance)
+
 
 class Admin(User):
     def __init__(self, name, email, address, restaurant):
         super().__init__(name, email, address)
         self.restaurant = restaurant
-        self.customers = []
 
     def add_items(self, item_name, item_quantity, item_price):
         self.restaurant.add_item(item_name, item_quantity, item_price)
@@ -86,18 +92,18 @@ class Admin(User):
 
     def add_customer(self, name, email, address):
         new_customer = Customer(name, email, address)
-        self.customers.append(new_customer)
+        self.restaurant.customer_list.append(new_customer)
 
     def view_customer(self):
         print("Employee_List")
-        for cus in self.customers:
+        for cus in self.restaurant.customer_list:
             print(f"Name : {cus.name}\t Email: {cus.email}\t Address : {cus.address}")
 
     def remove_customer(self, find_name):
         print("Removing Customer by their Name...")
-        for remove_one in self.customers:
+        for remove_one in self.restaurant.customer_list:
             if remove_one.name.lower() == find_name.lower():
-                self.customers.remove(remove_one)
+                self.restaurant.customer_list.remove(remove_one)
                 print(f"Customer '{find_name}' has been removed.")
                 return
         print("Customer name not found.")
