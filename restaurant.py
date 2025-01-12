@@ -1,5 +1,3 @@
-from pygetwindow import pointInRect
-
 from user import Admin, User, Customer
 
 
@@ -97,13 +95,11 @@ class Restaurant:
 
     def customer_menu(self, restaurant):
         your_name = input("Enter Your Name: ")
-        flag = 0
         old_customer = None
         for customer in self.customer_list:
             if your_name.lower() == customer.name.lower():
                 your_email = input("Enter Your Email Address: ")
                 if your_email.lower() == customer.email.lower():
-                    flag = 1
                     old_customer = customer
                 else:
                     print("Email Does Not Match")
